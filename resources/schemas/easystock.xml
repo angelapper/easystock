@@ -57,6 +57,7 @@
 
     <table tableName="stock_inventory" tableDbType="TABLE">
         <columns>
+            <column columnName="id"/>
             <column columnName="received_date"/>
             <column columnName="received_quantity"/>
             <column columnName="uom"/>
@@ -68,6 +69,8 @@
                     <fkTable>location</fkTable>
                 </fk>
             </column>
+            <column columnName="shelf"/>
+            <column columnName="box"/>
             <column columnName="lot_id">
                 <fk>
                     <fkColumnName>id</fkColumnName>
