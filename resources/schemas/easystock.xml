@@ -1,0 +1,79 @@
+<tables xmlns="http://labkey.org/data/xml">
+    <table tableName="location" tableDbType="TABLE">
+        <columns>
+            <colum columnName ="id"/>
+            <colum columnName ="name"/>
+            <colum columnName ="full_code"/>
+            <colum columnName ="plant_code"/>
+            <colum columnName ="is_plant"/>
+            <column columnName="city"/>
+            <column columnName="state"/>
+            <column columnName="country"/>
+            <column columnName="country_code"/>
+            <colum columnName ="create_date"/>
+        </columns>
+    </table>
+
+    <table tableName="stock_production" tableDbType="TABLE">
+        <columns>
+            <column columnName="id"/>
+            <column columnName="product_by">
+                <fk>
+                    <fkColumnName>id</fkColumnName>
+                    <fkTable>location</fkTable>
+                </fk>
+            </column>
+            <column columnName="lot">
+                <fk>
+                    <fkColumnName>id</fkColumnName>
+                    <fkTable>stock_production_lot</fkTable>
+                </fk>
+            </column>
+            <column columnName="production_batch"/>
+            <column columnName="production_date"/>
+            <column columnName="expiration_date"/>
+            <column columnName="product_name"/>
+            <column columnName="internal_code"/>
+            <column columnName="reference_code"/>
+            <column columnName="operator"/>
+            <column columnName="net_weight"/>
+            <column columnName="uow"/>
+            <column columnName="quantity"/>
+            <column columnName="uom"/>
+            <column columnName="package_amount"/>
+            <column columnName="uop"/>
+            <column columnName="humidity"/>
+        </columns>
+    </table>
+
+    <table tableName="stock_production_lot" tableDbType="TABLE">
+        <columns>
+            <column columnName="id"/>
+            <column columnName="lot"/>
+            <column columnName="name"/>
+            <column columnName="create_date"/>
+        </columns>
+    </table>
+
+    <table tableName="stock_inventory" tableDbType="TABLE">
+        <columns>
+            <column columnName="received_date"/>
+            <column columnName="received_quantity"/>
+            <column columnName="uom"/>
+            <column columnName="usage_quantity"/>
+            <column columnName="uom"/>
+            <column columnName="location_id">
+                <fk>
+                    <fkColumnName>id</fkColumnName>
+                    <fkTable>location</fkTable>
+                </fk>
+            </column>
+            <column columnName="lot_id">
+                <fk>
+                    <fkColumnName>id</fkColumnName>
+                    <fkTable>stock_production_lot</fkTable>
+                </fk>
+            </column>
+        </columns>
+    </table>
+</tables>
