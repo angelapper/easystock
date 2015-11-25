@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS easystock.Location;
 DROP TABLE IF EXISTS easystock.Production;
 DROP TABLE IF EXISTS easystock.ProductionLot;
 DROP TABLE IF EXISTS easystock.SampleInventory;
+DROP TABLE IF EXISTS easystock.SampleMove;
 
 CREATE TABLE easystock.Location
 (
@@ -24,6 +25,9 @@ CREATE TABLE easystock.Location
 
     CONSTRAINT PK_Location PRIMARY KEY (RowId)
 );
+
+INSERT INTO easystock.Location (Name, Code, FullCode, IsPlant, CountryCode, CountryName, City, State)
+VALUES ("Experiment","None","None",FALSE,"None","None","NONE","NONE");
 
 CREATE TABLE easystock.ProductionLot
 (
@@ -81,15 +85,13 @@ CREATE TABLE easystock.Production
     CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
 );
 
-
+-- for each location the lot available quantity
 CREATE TABLE easystock.SampleInventory
 (
     RowId SERIAL NOT NULL,
     LocationId INT NOT NULL,
     LotId INT NOT NULL,
-    ReceivedDate TIMESTAMP NULL,
-    ReceivedQuantity DECIMAL (10,2) NULL,
-    AvailableQuantity DECIMAL (10,2) NULL,
+    Quantity DECIMAL (10,2) NULL,
     UoM VARCHAR (10) NULL,
     Room VARCHAR (140) NULL,
     Shelf VARCHAR (140) NULL,
@@ -106,3 +108,28 @@ CREATE TABLE easystock.SampleInventory
     CONSTRAINT FK_SampleInventory_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
     CONSTRAINT FK_SampleInventory_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
 );
+
+CREATE TABLE easystock.SampleMove
+(
+    RowId SERIAL NOT NULL,
+    LocationId INT NULL,
+    DestLocationId INT NOT NULL DEFAULT 1,
+    LotId INT NOT NULL,
+    MoveDate TIMESTAMP NULL,
+    Quantity DECIMAL (10,2) NULL,
+    UoM VARCHAR (10) NULL,
+    Operator VARCHAR (200) NULL,
+
+    -- standard labkey columns
+    Container ENTITYID NOT NULL,
+    Created TIMESTAMP,
+    CreatedBy INTEGER,
+    Modified TIMESTAMP,
+    ModifiedBy INT NULL,
+
+    CONSTRAINT PK_SampleMove PRIMARY KEY (RowId),
+    CONSTRAINT FK_SampleInventory_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
+    CONSTRAINT FK_SampleInventory_DestLocation FOREIGN KEY (DestLocationId) REFERENCES easystock.Location (RowId),
+    CONSTRAINT FK_SampleInventory_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
+);
+
