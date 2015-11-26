@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <script type="text/javascript">
+        LABKEY.Utils.requiresScript("easystock/easystockconfig.js");
+        LABKEY.Utils.requiresScript("easystock/sampleinventory.js");
+    </script>
 </head>
 <body>
-dddddddddd
+<div id="all_inventory"></div>
+
+<script type="text/javascript">
+    Ext.onReady(SampleInventory.toShowGrid);
+</script>
+
 </body>
 </html>

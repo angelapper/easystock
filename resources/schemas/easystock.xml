@@ -41,7 +41,6 @@
             <column columnName="ProductionBatch"/>
             <column columnName="ProductName"/>
             <column columnName="InternalCode"/>
-            <column columnName="ReferenceCode"/>
             <column columnName="Operator"/>
             <column columnName="Humidity">
                 <formatString>0.0%</formatString>
@@ -69,11 +68,7 @@
     <table tableName="ProductionLot" tableDbType="TABLE">
         <columns>
             <column columnName="RowId"/>
-            <column columnName="Name"/>
             <column columnName="Lot"/>
-            <column columnName="ProductName"/>
-            <column columnName="CustomerName"/>
-            <column columnName="OfficialName"/>
             <column columnName="Reference"/>
             <colum columnName ="Container"/>
             <colum columnName ="Created"/>
@@ -85,7 +80,9 @@
 
     <table tableName="SampleInventory" tableDbType="TABLE">
         <columns>
-            <column columnName="RowId"/>
+            <column columnName="RowId">
+                <isHidden>true</isHidden>
+            </column>
             <column columnName="LocationId">
                 <fk>
                     <fkTable>Location</fkTable>
@@ -93,14 +90,13 @@
                 </fk>
             </column>
             <column columnName="LotId">
+                <columnTitle>Lot#</columnTitle>
                 <fk>
                     <fkTable>ProductionLot</fkTable>
-                    <fkColumnName>RowId</fkColumnName>
+                    <fkColumnName>Lot</fkColumnName>
                 </fk>
             </column>
-            <column columnName="ReceivedDate"/>
-            <column columnName="ReceivedQuantity"/>
-            <column columnName="AvailableQuantity"/>
+            <column columnName="Quantity"/>
             <column columnName="UoM"/>
             <column columnName="Room"/>
             <column columnName="Shelf"/>

@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS easystock.Location;
+DROP TABLE IF EXISTS easystock.Product;
 DROP TABLE IF EXISTS easystock.Production;
 DROP TABLE IF EXISTS easystock.ProductionLot;
 DROP TABLE IF EXISTS easystock.SampleInventory;
@@ -29,14 +30,29 @@ CREATE TABLE easystock.Location
 INSERT INTO easystock.Location (Name, Code, FullCode, IsPlant, CountryCode, CountryName, City, State)
 VALUES ("Experiment","None","None",FALSE,"None","None","NONE","NONE");
 
+CREATE TABLE easystock.Product
+(
+    RowId SERIAL NOT NULL,
+    Name VARCHAR (200) NOT NULL,
+    FullCode VARCHAR (40) NULL,
+    InternalCode VARCHAR (40) NULL,
+    InternalName VARCHAR (200) NULL,
+    TradeName VARCHAR (200) NULL,
+
+    -- standard labkey columns
+    Container ENTITYID NOT NULL,
+    Created TIMESTAMP,
+    CreatedBy INTEGER,
+    Modified TIMESTAMP,
+    ModifiedBy INT NULL,
+
+    CONSTRAINT PK_Product PRIMARY KEY (RowId)
+);
+
 CREATE TABLE easystock.ProductionLot
 (
     RowId SERIAL NOT NULL,
-    Name VARCHAR (200) NULL,
     Lot VARCHAR (200) NULL,
-    ProductName VARCHAR (200) NULL,
-    CustomerName VARCHAR (200) NULL,
-    OfficialName VARCHAR (200) NULL,
     Reference VARCHAR (200) NULL,
 
     -- standard labkey columns
@@ -49,6 +65,7 @@ CREATE TABLE easystock.ProductionLot
     CONSTRAINT PK_ProductionLot PRIMARY KEY (RowId),
     CONSTRAINT UQ_ProductionLot_Lot UNIQUE (Lot)
 );
+
 CREATE INDEX IX_ProductionLot_Lot ON easystock.ProductionLot (Lot);
 
 CREATE TABLE easystock.Production
@@ -56,14 +73,13 @@ CREATE TABLE easystock.Production
     RowId SERIAL NOT NULL,
     LocationId INT NOT NULL,
     LotId INT NULL,
+    WorkBookId INT NULL,
     ProductionDate TIMESTAMP NOT NULL,
     ExpirationDate TIMESTAMP NULL,
     BatchName VARCHAR (40) NULL,
     ProductionBatch VARCHAR (40) NULL,
-    ProductName VARCHAR (200) NULL,
-    InternalCode VARCHAR (10) NULL,     -- CELB
-    ReferenceCode VARCHAR (10) NULL,
-    WorkBookUrl VARCHAR (10) NULL,
+    ProductName VARCHAR (100) NULL,
+    InternalCode VARCHAR (40) NULL,
     Operator VARCHAR (200) NULL,
     Humidity DECIMAL (5,4) NULL,
     NetWeight DECIMAL (10,2) NULL,
