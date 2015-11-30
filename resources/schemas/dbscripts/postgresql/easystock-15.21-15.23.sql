@@ -27,9 +27,6 @@ CREATE TABLE easystock.Location
     CONSTRAINT PK_Location PRIMARY KEY (RowId)
 );
 
-INSERT INTO easystock.Location (Name, Code, FullCode, IsPlant, CountryCode, CountryName, City, State)
-VALUES ("Experiment","None","None",FALSE,"None","None","NONE","NONE");
-
 CREATE TABLE easystock.Product
 (
     RowId SERIAL NOT NULL,

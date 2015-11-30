@@ -23,7 +23,16 @@ var SampleInventory = {
 
     },
     onAssignLot:function(){
-        
+
     }
+};
+
+function onReceiveSample()
+{
+
 }
 
+function onUseSample()
+{
+
+}

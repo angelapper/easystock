@@ -93,7 +93,7 @@
                 <columnTitle>Lot#</columnTitle>
                 <fk>
                     <fkTable>ProductionLot</fkTable>
-                    <fkColumnName>Lot</fkColumnName>
+                    <fkColumnName>RowId</fkColumnName>
                 </fk>
             </column>
             <column columnName="Quantity"/>
