@@ -1,10 +1,17 @@
 <tables xmlns="http://labkey.org/data/xml">
     <table tableName="Location" tableDbType="TABLE">
         <columns>
-            <colum columnName ="RowId"/>
+            <colum columnName ="RowId">
+                <columnTitle>Row Id</columnTitle>
+                <isHidden>true</isHidden>
+            </colum>
             <colum columnName ="Name"/>
-            <colum columnName ="Code"/>
-            <colum columnName ="FullCode"/>
+            <colum columnName ="Code">
+                <isHidden>true</isHidden>
+            </colum>
+            <colum columnName ="FullCode">
+                <columnTitle>Full Code</columnTitle>
+            </colum>
             <colum columnName ="IsPlant"/>
             <column columnName="CountryCode"/>
             <column columnName="CountryName"/>

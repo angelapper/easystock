@@ -10,8 +10,27 @@ Trigger scripts attached to a query (.js files)
 -->
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
    <columns>
-      <column name="RowId"/>
-      <column name="LocationId"/>
+      <column name="ProductionDate"/>
+      <column name="LotId">
+         <properties>
+            <property name="columnTitle" value="Lot Number"/>
+         </properties>
+      </column>
       <column name="ProductName"/>
+      <column name="InternalCode">
+         <properties>
+            <property name="columnTitle" value="CELB#"/>
+         </properties>
+      </column>
+      <column name="Operator"/>
+      <column name="LocationId" >
+         <properties>
+            <property name="columnTitle" value="Plant Name"/>
+         </properties>
+      </column>
    </columns>
+   <sorts>
+      <sort column="ProductName"/>
+   </sorts>
 </customView>
+

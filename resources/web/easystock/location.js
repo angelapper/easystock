@@ -1,23 +1,21 @@
 /**
  * Created by shuozhao on 11/25/2015.
+ * https://www.labkey.org/wiki/home/Documentation/page.view?name=webPartConfig
  */
-var SampleInventory = {
+var Location = {
     toShowGrid:  function(){
         var qwp1 = new LABKEY.QueryWebPart({
-            renderTo: 'all_inventory',
+            renderTo: 'all_location',
             schemaName: dbSchemaName,
-            queryName: 'SampleInventory',
+            queryName: 'Location',
             frame: 'none',
-            showDetailsColumn: true,
-            showRecordSelectors: true,
+            allowChooseQuery:false,
+            allowChooseView :false,
             buttonBar: {
-                includeStandardButtons: true,
-                items:[
-                    {text: 'Item 2', handler: this.onAssignLot}
-                ]
+                includeStandardButtons: true
             }
         });
-      //  qwp1.on("render", this.onRender());
+        //qwp1.on("render", this.onRender());
     },
     onRender: function ()   {
 

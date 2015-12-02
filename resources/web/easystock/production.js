@@ -12,26 +12,19 @@ var Production = (function()
                 queryName: 'Production',
                 viewName: 'default_productions',
                 frame: 'none',
-                showDetailsColumn: false,
+                showDetailsColumn: true,
                 showUpdateColumn: true,
+                allowChooseQuery:false,
+                allowChooseView :false,
                 buttonBarPosition: 'top',
                 buttonBar: {
                     includeStandardButtons: true,
                     items: [
-                        {text: 'Assign Lot#', handler: onAssignLot}
+                        {text: 'New Lot#', handler: onAssignLot}
                     ]
                 }
             });
-
-            pGrid.on("render", onRender);
-        },
-        convertYear: function(data)
-        {
-            return convertYearToCode(data);
-        },
-        serverTime: function()
-        {
-            return new Date(srvTime()).getFullYear();
+            //pGrid.on("render", onRender);
         }
     };
     function onAssignLot(dataRegion)
@@ -40,17 +33,15 @@ var Production = (function()
             success: onGetSelected
         });
     };
+
     function convertYearToCode(currentYear)
     {
         var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        console.log("input:"+currentYear);
         var indexCode = currentYear - 2011;
 
         if(indexCode >= 0 && indexCode < alphabet.length)
         {
-            console.log(alphabet);
-            console.log("out :"+indexCode);
             return alphabet[indexCode];
         }
         return 'E'
@@ -82,11 +73,11 @@ var Production = (function()
         xmlHttp.send('');
         return xmlHttp.getResponseHeader("Date");
     }*/
-
     function onRender()
     {
         console.log("On Render");
     };
+
     var currentYearCode = "E";
     function onGetSelected(data, response)
     {
@@ -101,29 +92,38 @@ var Production = (function()
          });*/
 
 //https://www.labkey.org/wiki/home/Documentation/page.view?name=reagentRequestConfirmation
-        var svrDateTime = new Date(response.getResponseHeader("Date"));
-        currentYearCode = convertYearToCode(svrDateTime.getFullYear());
+        var allSelectedIds = data.selected.length > 1 ? data.selected.join() :  data.selected[0];
 
-        var allSelectedIds= data.selected.length > 1 ? data.selected.join() :  data.selected[0];
+        if(allSelectedIds)
+        {
+            var svrDateTime = new Date(response.getResponseHeader("Date"));
+            currentYearCode = convertYearToCode(svrDateTime.getFullYear());
 
-        LABKEY.Query.executeSql({
-            schemaName: 'easystock',
-            sql:'SELECT prod.LocationId, loc.FullCode FROM ' +
-            'easystock.Production prod ' +
-            'LEFT JOIN ' +
-            'easystock.Location loc ON prod.LocationId = loc.RowId ' +
-            'where id is in {'+ allSelectedIds +'}',
-            success: onSuccess,
-            failure: onFailure
-        });
+            var querySql = 'SELECT prod.RowId, prod.LotId, prod.LocationId,prod.ProductName, loc.FullCode FROM ' +
+                    'easystock.Production prod ' +
+                    'LEFT JOIN ' +
+                    'easystock.Location loc ON prod.LocationId = loc.RowId ' +
+                    'WHERE prod.RowId  in ('+allSelectedIds+')';
+
+            LABKEY.Query.executeSql({
+                schemaName: 'easystock',
+                sql: querySql,
+                success: onSuccess,
+                failure: onFailure
+            });
+        }
+
     }
     function onSuccess(data)
     {
         console.log("Year is "+currentYearCode+". Success Select Row Cout: " + data.rowCount );
         console.log(data);
-        if(data.rowCount >= 1)
-        {
-            console.log(data.rows[0].ProductName);
+
+        for (i = 0; i < data.rows.length; i++) {
+            //console.log(data.rows[i].ProductName +"  "+data.rows[i].LotId);
+            if(!data.rows[i].LotId){
+                console.log("Need A new lot number for location "+ data.rows[i].FullCode +" year "+ currentYearCode);
+            }
         }
         // console.log(localRegion);
         //calculate lots number based on plant code
