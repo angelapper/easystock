@@ -17,6 +17,8 @@ CREATE TABLE easystock.Location
     CountryName VARCHAR (200) NULL,
     City VARCHAR (200) NULL,
     State VARCHAR (200) NULL,
+    CurrentYear CHAR NOT NULL DEFAULT 'E',
+    YearCount INT NOT NULL DEFAULT 1,
 
     -- standard labkey columns
     Container ENTITYID NOT NULL,

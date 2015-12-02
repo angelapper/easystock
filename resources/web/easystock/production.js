@@ -99,7 +99,8 @@ var Production = (function()
             var svrDateTime = new Date(response.getResponseHeader("Date"));
             currentYearCode = convertYearToCode(svrDateTime.getFullYear());
 
-            var querySql = 'SELECT prod.RowId, prod.LotId, prod.LocationId,prod.ProductName, loc.FullCode FROM ' +
+            var querySql = 'SELECT prod.RowId, prod.LotId, prod.LocationId, ' +
+                    'prod.ProductName, loc.FullCode, loc.CurrentYear, loc.YearCount FROM ' +
                     'easystock.Production prod ' +
                     'LEFT JOIN ' +
                     'easystock.Location loc ON prod.LocationId = loc.RowId ' +
@@ -114,15 +115,30 @@ var Production = (function()
         }
 
     }
+
     function onSuccess(data)
     {
         console.log("Year is "+currentYearCode+". Success Select Row Cout: " + data.rowCount );
         console.log(data);
 
+        var locationMap ={};
         for (i = 0; i < data.rows.length; i++) {
             //console.log(data.rows[i].ProductName +"  "+data.rows[i].LotId);
             if(!data.rows[i].LotId){
                 console.log("Need A new lot number for location "+ data.rows[i].FullCode +" year "+ currentYearCode);
+                var key = data.rows[i].LocationId;
+                var counter = 0;
+                if( key in locationMap)
+                {
+                    counter = locationMap[key];
+                }
+                counter++;
+                locationMap[key] = counter;
+
+                var lotNumber = data.rows[i].FullCode + currentYearCode + pad(counter,4);
+                console.log("New Lot number should be "+ lotNumber);
+
+                //save lot number to production lot
             }
         }
         // console.log(localRegion);
@@ -140,6 +156,15 @@ var Production = (function()
         else
             console.log("Failure: " + responseObj.statusText);
     }
+
+    function pad(number, length) {
+        var str = '' + number;
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        return str;
+    }
+
     return apis;
 }());
 
