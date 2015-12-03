@@ -15,19 +15,41 @@ var Production = (function()
                 showDetailsColumn: true,
                 showUpdateColumn: true,
                 allowChooseQuery:false,
-                allowChooseView :false,
+                allowChooseView :true,
                 buttonBarPosition: 'top',
                 buttonBar: {
                     includeStandardButtons: true,
                     items: [
-                        {text: 'New Lot#', handler: onAssignLot}
+                        {text: 'New Lot#', handler: onNewLot},
+                        {text: 'Assign Lot#', handler: onAssignLot}
                     ]
+                }
+            });
+            //pGrid.on("render", onRender);
+        },
+        showSummary:  function ()
+        {
+            var pGrid = new LABKEY.QueryWebPart({
+                renderTo: 'production_summary',
+                schemaName: dbSchemaName,
+                queryName: 'plant_summary',
+                frame: 'none',
+                showDetailsColumn: false,
+                showUpdateColumn: false,
+                allowChooseQuery:false,
+                allowChooseView :false,
+                buttonBarPosition: 'top',
+                buttonBar: {
+                    includeStandardButtons: false,
                 }
             });
             //pGrid.on("render", onRender);
         }
     };
-    function onAssignLot(dataRegion)
+    function onAssignLot(dataRegion){
+
+    }
+    function onNewLot(dataRegion)
     {
         dataRegion.getSelected({
             success: onGetSelected
@@ -100,7 +122,7 @@ var Production = (function()
             currentYearCode = convertYearToCode(svrDateTime.getFullYear());
 
             var querySql = 'SELECT prod.RowId, prod.LotId, prod.LocationId, ' +
-                    'prod.ProductName, loc.FullCode, loc.CurrentYear, loc.YearCount FROM ' +
+                    'prod.ProductName, loc.FullCode, loc.Annualstat FROM ' +
                     'easystock.Production prod ' +
                     'LEFT JOIN ' +
                     'easystock.Location loc ON prod.LocationId = loc.RowId ' +
@@ -122,8 +144,8 @@ var Production = (function()
         console.log(data);
 
         var locationMap ={};
+        var rowsToInsert=[];
         for (i = 0; i < data.rows.length; i++) {
-            //console.log(data.rows[i].ProductName +"  "+data.rows[i].LotId);
             if(!data.rows[i].LotId){
                 console.log("Need A new lot number for location "+ data.rows[i].FullCode +" year "+ currentYearCode);
                 var key = data.rows[i].LocationId;
@@ -132,13 +154,20 @@ var Production = (function()
                 {
                     counter = locationMap[key];
                 }
+                else {
+                    console.log("all annual stat: "+data.rows[i].Annualstat);
+                    var savedCounter = JSON.parse(data.rows[i].Annualstat);
+                    counter = savedCounter.stat.total;
+                }
                 counter++;
                 locationMap[key] = counter;
 
                 var lotNumber = data.rows[i].FullCode + currentYearCode + pad(counter,4);
                 console.log("New Lot number should be "+ lotNumber);
-
                 //save lot number to production lot
+                rowsToInsert.push({
+                    "lot":lotNumber
+                });
             }
         }
         // console.log(localRegion);
@@ -146,7 +175,19 @@ var Production = (function()
         //assign lots to select items
 
         //country code, plant code, year
-        //      LABKEY.Query.insertRows({
+
+        if(rowsToInsert.length > 0){
+            LABKEY.Query.insertRows({
+                schemaName: 'easystock',
+                queryName: 'ProductionLot',
+                rows: rowsToInsert,
+                failure: function(){
+                    console.log('Fail', 'Fail to insert');
+                },
+                success: onSuccessNewLot
+            });
+        }
+        //
     }
 
     function onFailure(errorInfo, options, responseObj)
@@ -163,6 +204,14 @@ var Production = (function()
             str = '0' + str;
         }
         return str;
+    }
+
+    function onSuccessNewLot(rowResults, requestObj,options)
+    {
+        console.log('Success', rowResults);
+        console.log('requestObj', requestObj);
+        console.log('options', options);
+
     }
 
     return apis;

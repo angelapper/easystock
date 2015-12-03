@@ -17,8 +17,7 @@ CREATE TABLE easystock.Location
     CountryName VARCHAR (200) NULL,
     City VARCHAR (200) NULL,
     State VARCHAR (200) NULL,
-    CurrentYear CHAR NOT NULL DEFAULT 'E',
-    YearCount INT NOT NULL DEFAULT 1,
+    YearCount VARCHAR (200) NOT NULL DEFAULT '{"stat":{"year":2015,"total":0}}',
 
     -- standard labkey columns
     Container ENTITYID NOT NULL,
@@ -151,7 +150,6 @@ CREATE TABLE easystock.SampleMove
     CONSTRAINT FK_SampleMove_UoMId FOREIGN KEY (UoMId) REFERENCES easystock.Unit (RowId)
 );
 
-
 CREATE TABLE easystock.Unit
 (
     RowId SERIAL NOT NULL,
@@ -165,5 +163,5 @@ CREATE TABLE easystock.Unit
     Modified TIMESTAMP,
     ModifiedBy INT NULL,
 
-    CONSTRAINT PK_Unit PRIMARY KEY (RowId),
+    CONSTRAINT PK_Unit PRIMARY KEY (RowId)
 );
