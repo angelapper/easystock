@@ -1,22 +1,10 @@
-<!--
-https://www.labkey.org/wiki/home/Documentation/page.view?name=addHTMLandWebPart
-URL will be:
-http://<domain>/labkey/<module name>/<file_path_under_view_directory>/<page_name>.view|html
--->
 
-<html>
-<head>
-    <script type="text/javascript">
+<script type="text/javascript">
         LABKEY.Utils.requiresScript("easystock/easystockconfig.js");
         LABKEY.Utils.requiresScript("easystock/sampleinventory.js");
-    </script>
-</head>
-<body>
-<div id="all_inventory"></div>
+</script>
 
+<div id="all_inventory"></div>
 <script type="text/javascript">
     Ext.onReady(SampleInventory.toShowGrid);
 </script>
-
-</body>
-</html>

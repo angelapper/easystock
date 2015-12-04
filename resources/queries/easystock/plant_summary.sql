@@ -1,3 +1,5 @@
+-- https://www.labkey.org/wiki/home/Documentation/page.view?name=labkeySql#params
+-- https://www.labkey.org/wiki/home/Documentation/page.view?name=customSQL
 SELECT
 production.LocationId ,
 COUNT(CASE WHEN  production.LotId is NULL THEN 1 END) AS New,

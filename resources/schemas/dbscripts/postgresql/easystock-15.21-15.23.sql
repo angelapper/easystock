@@ -29,6 +29,16 @@ CREATE TABLE easystock.Location
     CONSTRAINT PK_Location PRIMARY KEY (RowId)
 );
 
+CREATE TABLE easystock.Location_Product (
+  rowid serial,
+  tag varchar(200),
+  container entityid,
+  created int,
+  createdby timestamp,
+
+  CONSTRAINT pk_workbook_tags PRIMARY KEY (rowid)
+);
+
 CREATE TABLE easystock.Product
 (
     RowId SERIAL NOT NULL,
@@ -37,6 +47,10 @@ CREATE TABLE easystock.Product
     InternalCode VARCHAR (40) NULL,
     InternalName VARCHAR (200) NULL,
     TradeName VARCHAR (200) NULL,
+    Category  VARCHAR (100) NULL,
+    ProductionLine  VARCHAR (100) NULL,
+    Description TEXT NULL,
+    CurrentStatus ENUM ('Research', 'Assessment', 'Sample','Available To Market','Out of Support');
 
     -- standard labkey columns
     Container ENTITYID NOT NULL,
