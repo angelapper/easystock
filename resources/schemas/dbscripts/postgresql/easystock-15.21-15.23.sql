@@ -1,10 +1,11 @@
 DROP TABLE IF EXISTS easystock.Location;
 DROP TABLE IF EXISTS easystock.Product;
 DROP TABLE IF EXISTS easystock.Production;
+DROP TABLE IF EXISTS easystock.LocationProduct;
 DROP TABLE IF EXISTS easystock.ProductionLot;
+
 DROP TABLE IF EXISTS easystock.SampleInventory;
 DROP TABLE IF EXISTS easystock.SampleMove;
-DROP TABLE IF EXISTS easystock.Unit;
 
 CREATE TABLE easystock.Location
 (
@@ -29,28 +30,20 @@ CREATE TABLE easystock.Location
     CONSTRAINT PK_Location PRIMARY KEY (RowId)
 );
 
-CREATE TABLE easystock.Location_Product (
-  rowid serial,
-  tag varchar(200),
-  container entityid,
-  created int,
-  createdby timestamp,
-
-  CONSTRAINT pk_workbook_tags PRIMARY KEY (rowid)
-);
-
+-- Product Trade Name by Method
+-- Sample Product CELB#
+--ENUM ('Research', 'Assessment', 'Sample','Available To Market','Out of Support');
 CREATE TABLE easystock.Product
 (
     RowId SERIAL NOT NULL,
     Name VARCHAR (200) NOT NULL,
+    CommonName VARCHAR (200)  NULL,
     FullCode VARCHAR (40) NULL,
     InternalCode VARCHAR (40) NULL,
-    InternalName VARCHAR (200) NULL,
-    TradeName VARCHAR (200) NULL,
     Category  VARCHAR (100) NULL,
     ProductionLine  VARCHAR (100) NULL,
     Description TEXT NULL,
-    CurrentStatus ENUM ('Research', 'Assessment', 'Sample','Available To Market','Out of Support');
+    CurrentStatus VARCHAR (100) NULL,
 
     -- standard labkey columns
     Container ENTITYID NOT NULL,
@@ -60,6 +53,23 @@ CREATE TABLE easystock.Product
     ModifiedBy INT NULL,
 
     CONSTRAINT PK_Product PRIMARY KEY (RowId)
+);
+
+CREATE TABLE easystock.LocationProduct (
+  RowId SERIAL NOT NULL,
+  ProductId INT NOT NULL,
+  LocationId INT NOT NULL,
+
+  -- standard labkey columns
+  Container ENTITYID NOT NULL,
+  Created TIMESTAMP,
+  CreatedBy INTEGER,
+  Modified TIMESTAMP,
+  ModifiedBy INT NULL,
+
+  CONSTRAINT PK_LocationProduct PRIMARY KEY (RowId),
+  CONSTRAINT FK__LocationProduct_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId),
+  CONSTRAINT FK__LocationProduct_LocationId FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId)
 );
 
 CREATE TABLE easystock.ProductionLot
@@ -91,8 +101,7 @@ CREATE TABLE easystock.Production
     ExpirationDate TIMESTAMP NULL,
     BatchName VARCHAR (40) NULL,
     ProductionBatch VARCHAR (40) NULL,
-    ProductName VARCHAR (100) NULL,
-    InternalCode VARCHAR (40) NULL,
+    ProductId  INT NOT NULL,
     Operator VARCHAR (200) NULL,
     Humidity DECIMAL (5,4) NULL,
     NetWeight DECIMAL (10,2) NULL,
@@ -111,7 +120,9 @@ CREATE TABLE easystock.Production
 
     CONSTRAINT PK_Production PRIMARY KEY (RowId),
     CONSTRAINT FK_Production_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
-    CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
+    CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId),
+    CONSTRAINT FK__Production_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId)
+
 );
 
 -- for each location the lot available quantity
@@ -120,8 +131,8 @@ CREATE TABLE easystock.SampleInventory
     RowId SERIAL NOT NULL,
     LocationId INT NOT NULL,
     LotId INT NOT NULL,
-    Quantity DECIMAL (10,2) NULL,
-    UoMId INT NOT NULL,
+    Quantity DECIMAL (10,2) NOT NULL,
+    UoM VARCHAR (10) NOT NULL,
     Room VARCHAR (140) NULL,
     Shelf VARCHAR (140) NULL,
     Box VARCHAR (140) NULL,
@@ -135,8 +146,7 @@ CREATE TABLE easystock.SampleInventory
 
     CONSTRAINT PK_SampleInventory PRIMARY KEY (RowId),
     CONSTRAINT FK_SampleInventory_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
-    CONSTRAINT FK_SampleInventory_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId),
-    CONSTRAINT FK_SampleInventory_UoMId FOREIGN KEY (UoMId) REFERENCES easystock.Unit (RowId)
+    CONSTRAINT FK_SampleInventory_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
 );
 
 CREATE TABLE easystock.SampleMove
@@ -146,8 +156,8 @@ CREATE TABLE easystock.SampleMove
     DestLocationId INT NOT NULL DEFAULT 1,
     LotId INT NOT NULL,
     MoveDate TIMESTAMP NULL,
-    Quantity DECIMAL (10,2) NULL,
-    UoMId INT NOT NULL,
+    Quantity DECIMAL (10,2) NOT NULL,
+    UoM VARCHAR (10) NOT NULL,
     Operator VARCHAR (200) NULL,
 
     -- standard labkey columns
@@ -160,22 +170,5 @@ CREATE TABLE easystock.SampleMove
     CONSTRAINT PK_SampleMove PRIMARY KEY (RowId),
     CONSTRAINT FK_SampleMove_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
     CONSTRAINT FK_SampleMove_DestLocation FOREIGN KEY (DestLocationId) REFERENCES easystock.Location (RowId),
-    CONSTRAINT FK_SampleMove_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId),
-    CONSTRAINT FK_SampleMove_UoMId FOREIGN KEY (UoMId) REFERENCES easystock.Unit (RowId)
-);
-
-CREATE TABLE easystock.Unit
-(
-    RowId SERIAL NOT NULL,
-    Name VARCHAR (100) NULL,
-    Category VARCHAR (200) NULL,
-
-    -- standard labkey columns
-    Container ENTITYID NOT NULL,
-    Created TIMESTAMP,
-    CreatedBy INTEGER,
-    Modified TIMESTAMP,
-    ModifiedBy INT NULL,
-
-    CONSTRAINT PK_Unit PRIMARY KEY (RowId)
+    CONSTRAINT FK_SampleMove_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
 );

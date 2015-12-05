@@ -17,6 +17,33 @@
             <column columnName="CountryName"/>
             <column columnName="City"/>
             <column columnName="State"/>
+            <colum columnName ="YearCount"/>
+
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="Product" tableDbType="TABLE">
+        <columns>
+            <colum columnName ="RowId">
+                <columnTitle>Row Id</columnTitle>
+            </colum>
+            <colum columnName ="Name"/>
+            <colum columnName ="CommonName"/>
+            <colum columnName ="FullCode">
+                <columnTitle>Full Code</columnTitle>
+            </colum>
+            <colum columnName ="IsPlant"/>
+            <column columnName="InternalCode"/>
+            <column columnName="Category"/>
+            <column columnName="ProductionLine"/>
+            <colum columnName ="Description"/>
+            <colum columnName ="CurrentStatus"/>
+
             <colum columnName ="Container"/>
             <colum columnName ="Created"/>
             <colum columnName ="CreatedBy"/>
