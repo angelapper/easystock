@@ -72,8 +72,8 @@
             <column columnName="ProductionDate"/>
             <column columnName="ExpirationDate"/>
             <column columnName="BatchName"/>
-            <column columnName="ProductionBatch"/>
-            <column columnName="ProductName"/>
+            <column columnName="ProductionName"/>
+            <column columnName="SerialCode"/>
             <column columnName="InternalCode"/>
             <column columnName="Operator"/>
             <column columnName="Humidity">

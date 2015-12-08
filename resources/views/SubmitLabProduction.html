@@ -1,0 +1,103 @@
+<form name="covinalab">
+    <table cellspacing="0" cellpadding="5" border="0">
+        <tr>
+            <td colspan="2">Please Use this form to submit lab sample production information</td>
+        </tr>
+        <tr>
+            <td colspan="2"><div id="errorTxt" style="display:none;color:red"></div></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Production Date:*</strong></td>
+            <td valign="top"><input type="text" id="production_date" name="production_date" size="30"></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Product:*</strong></td>
+            <td valign="top">
+                <div>
+                    <select id="productlist" name="products">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Quantity:*</strong></td>
+            <td valign="top">
+                <input type="text" name="quantity" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Unit:*</strong></td>
+            <td valign="top">
+                <select id="uom" name="uom">
+                    <option value="Liter">Liter</option>
+                    <option value="Milliliter">Milliliter</option>
+                    <option value="Gallon">Gallon</option>
+                    <option value="gram">Gram</option>
+                    <option value="kilogram">Kilogram</option>
+                    <option value="Pound">Pound</option>
+                    <option value="Ounce">Ounce</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Net Weight:*</strong></td>
+            <td valign="top">
+                <input type="text" name="netweight" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Weight Unit:*</strong></td>
+            <td valign="top">
+                <select id="weightunits" name="weightunits">
+                    <option value="Gram">Gram</option>
+                    <option value="Kilogram">Kilogram</option>
+                    <option value="Pound">Pound</option>
+                    <option value="Ounce">Ounce</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Provider:*</strong></td>
+            <td valign="top">
+                <select id="provider_name" name="provider_name">
+                    <option value="Ian Chan">Ian Chan</option>
+                    <option value="Larry Co">Larry Co</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                <div align="center">
+                    <input value='Submit' type='button' onclick='submitRequest()'>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    LABKEY.Utils.requiresCSS("calendar/pikaday.css");
+    LABKEY.Utils.requiresScript("calendar/moment.min.js");
+    LABKEY.Utils.requiresScript("calendar/pikaday.js");
+
+
+
+    MyApp = function()
+    {
+        return {
+            init: function() {
+                var picker = new Pikaday({
+                    field: document.getElementById('production_date'),
+                    onSelect: function() {
+                        console.log(this.getMoment().format('Do MMMM YYYY'));
+                    }
+                });
+            },
+            foo: function() {},
+            bar: function() {}
+        };
+    }();
+
+    Ext.onReady(MyApp.init, MyApp);
+
+</script>
