@@ -29,9 +29,7 @@
 
     <table tableName="Product" tableDbType="TABLE">
         <columns>
-            <colum columnName ="RowId">
-                <columnTitle>Row Id</columnTitle>
-            </colum>
+            <colum columnName ="RowId"/>
             <colum columnName ="Name"/>
             <colum columnName ="CommonName"/>
             <colum columnName ="FullCode">
@@ -43,7 +41,6 @@
             <column columnName="ProductionLine"/>
             <colum columnName ="Description"/>
             <colum columnName ="CurrentStatus"/>
-
             <colum columnName ="Container"/>
             <colum columnName ="Created"/>
             <colum columnName ="CreatedBy"/>
@@ -90,6 +87,30 @@
             <column columnName="PackageAmount"/>
             <column columnName="UoP">
                 <columnTitle>Package Type</columnTitle>
+            </column>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="LocationProduct" tableDbType="TABLE">
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="ProductId">
+                <fk>
+                    <fkTable>Product</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                    <fkDisplayColumnName useRawValue="true">Name</fkDisplayColumnName>
+                </fk>
+            </column>
+            <column columnName="LocationId">
+                <fk>
+                    <fkTable>Location</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
             </column>
             <colum columnName ="Container"/>
             <colum columnName ="Created"/>

@@ -80,10 +80,9 @@
     LABKEY.Utils.requiresScript("calendar/moment.min.js");
     LABKEY.Utils.requiresScript("calendar/pikaday.js");
 
-
-
     MyApp = function()
     {
+        var locationId=1;
         return {
             init: function() {
                 var picker = new Pikaday({
@@ -92,12 +91,32 @@
                         console.log(this.getMoment().format('Do MMMM YYYY'));
                     }
                 });
+//this.sampleNames.join(';') ,LABKEY.Filter.Types.IN
+                LABKEY.Query.selectRows({
+                    schemaName: 'easystock',
+                    queryName: 'LocationProduct',
+                    containerFilter:LABKEY.Query.containerFilter.currentAndSubfolders,
+                    columns:['RowId','ProductId','LocationId','ProductId/Name'],
+                    filterArray: [
+                        LABKEY.Filter.create('LocationId', locationId,LABKEY.Filter.Types.EQUAL)],
+                    success: populateProducts
+                });
             },
             foo: function() {},
             bar: function() {}
         };
     }();
-
+    function populateProducts(data) {
+        console.log(data);
+        var el = document.getElementById("productlist");
+        el.options[0].text = "<Select productlist>";
+        for (var i = 0; i < data.rows.length; i++) {
+            var opt = document.createElement("option");
+            opt.text = data.rows[i]["ProductId/Name"];
+            opt.value = data.rows[i].ProductId;
+            el.options[el.options.length] = opt;
+        }
+    }
     Ext.onReady(MyApp.init, MyApp);
 
 </script>
