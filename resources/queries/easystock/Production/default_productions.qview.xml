@@ -16,7 +16,6 @@ Trigger scripts attached to a query (.js files)
             <property name="columnTitle" value="Lot Number"/>
          </properties>
       </column>
-      <column name="ProductName"/>
       <column name="InternalCode">
          <properties>
             <property name="columnTitle" value="CELB#"/>
@@ -29,8 +28,8 @@ Trigger scripts attached to a query (.js files)
          </properties>
       </column>
    </columns>
-   <sorts>
+   <!--sorts>
       <sort column="ProductName"/>
-   </sorts>
+   </sorts -->
 </customView>
 

@@ -1,5 +1,4 @@
 SELECT
 Production.RowId,
-Production.LocationId,
-Production.ProductName
+Production.LocationId
 FROM easystock.Production

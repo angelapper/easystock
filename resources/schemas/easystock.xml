@@ -68,10 +68,14 @@
             </column>
             <column columnName="ProductionDate"/>
             <column columnName="ExpirationDate"/>
-            <column columnName="BatchName"/>
             <column columnName="ProductionName"/>
             <column columnName="SerialCode"/>
-            <column columnName="InternalCode"/>
+            <column columnName="ProductId">
+                <fk>
+                    <fkTable>Product</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
             <column columnName="Operator"/>
             <column columnName="Humidity">
                 <formatString>0.0%</formatString>

@@ -118,22 +118,23 @@ var Production = (function()
 
         if(allSelectedIds)
         {
+            console.log(response);
             var svrDateTime = new Date(response.getResponseHeader("Date"));
             currentYearCode = convertYearToCode(svrDateTime.getFullYear());
 
             var querySql = 'SELECT prod.RowId, prod.LotId, prod.LocationId, ' +
-                    'prod.ProductName, loc.FullCode, loc.Annualstat FROM ' +
+                    'loc.FullCode, loc.Annualstat FROM ' +
                     'easystock.Production prod ' +
                     'LEFT JOIN ' +
                     'easystock.Location loc ON prod.LocationId = loc.RowId ' +
                     'WHERE prod.RowId  in ('+allSelectedIds+')';
 
-            LABKEY.Query.executeSql({
+          /*  LABKEY.Query.executeSql({
                 schemaName: 'easystock',
                 sql: querySql,
                 success: onSuccess,
                 failure: onFailure
-            });
+            });*/
         }
 
     }
@@ -145,6 +146,7 @@ var Production = (function()
 
         var locationMap ={};
         var rowsToInsert=[];
+
         for (i = 0; i < data.rows.length; i++) {
             if(!data.rows[i].LotId){
                 console.log("Need A new lot number for location "+ data.rows[i].FullCode +" year "+ currentYearCode);
