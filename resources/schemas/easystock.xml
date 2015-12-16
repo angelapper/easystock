@@ -19,7 +19,6 @@
             <column columnName="State"/>
             <colum columnName ="YearCount"/>
 
-            <colum columnName ="Container"/>
             <colum columnName ="Created"/>
             <colum columnName ="CreatedBy"/>
             <colum columnName ="Modified"/>

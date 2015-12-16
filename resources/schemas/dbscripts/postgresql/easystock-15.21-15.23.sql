@@ -21,7 +21,6 @@ CREATE TABLE easystock.Location
     YearCount VARCHAR (200) NOT NULL DEFAULT '{"stat":{"year":2015,"total":0}}',
 
     -- standard labkey columns
-    Container ENTITYID NOT NULL,
     Created TIMESTAMP,
     CreatedBy INTEGER,
     Modified TIMESTAMP,
