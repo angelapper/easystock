@@ -1,0 +1,13 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+   <columns>
+
+      <column name="ProductId"/>
+      <column name="TotalCount"/>
+      <column name="TotalQuantity"/>
+      <column name="UnitofMeasure"/>
+   </columns>
+   <!--sorts>
+      <sort column="ProductName"/>
+   </sorts -->
+</customView>
+

@@ -45,7 +45,6 @@ CREATE TABLE easystock.Product
     CurrentStatus VARCHAR (100) NULL,
 
     -- standard labkey columns
-    Container ENTITYID NOT NULL,
     Created TIMESTAMP,
     CreatedBy INTEGER,
     Modified TIMESTAMP,

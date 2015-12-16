@@ -34,7 +34,6 @@
             <colum columnName ="FullCode">
                 <columnTitle>Full Code</columnTitle>
             </colum>
-            <colum columnName ="IsPlant"/>
             <column columnName="InternalCode"/>
             <column columnName="Category"/>
             <column columnName="ProductionLine"/>
