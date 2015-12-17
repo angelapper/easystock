@@ -120,7 +120,6 @@ CREATE TABLE easystock.Production
     CONSTRAINT FK_Production_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
     CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId),
     CONSTRAINT FK__Production_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId)
-
 );
 
 -- for each location the lot available quantity
