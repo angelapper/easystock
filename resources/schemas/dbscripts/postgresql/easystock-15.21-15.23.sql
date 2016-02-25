@@ -1,7 +1,5 @@
 DROP TABLE IF EXISTS easystock.Location;
-DROP TABLE IF EXISTS easystock.Product;
 DROP TABLE IF EXISTS easystock.Production;
-DROP TABLE IF EXISTS easystock.LocationProduct;
 DROP TABLE IF EXISTS easystock.ProductionLot;
 
 DROP TABLE IF EXISTS easystock.SampleInventory;
@@ -32,7 +30,7 @@ CREATE TABLE easystock.Location
 -- Product Trade Name by Method
 -- Sample Product CELB#
 --ENUM ('Research', 'Assessment', 'Sample','Available To Market','Out of Support');
-CREATE TABLE easystock.Product
+/*CREATE TABLE easystock.Product
 (
     RowId SERIAL NOT NULL,
     Name VARCHAR (200) NOT NULL,
@@ -68,7 +66,7 @@ CREATE TABLE easystock.LocationProduct (
   CONSTRAINT PK_LocationProduct PRIMARY KEY (RowId),
   CONSTRAINT FK__LocationProduct_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId),
   CONSTRAINT FK__LocationProduct_LocationId FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId)
-);
+);*/
 
 CREATE TABLE easystock.ProductionLot
 (
@@ -92,20 +90,30 @@ CREATE INDEX IX_ProductionLot_Lot ON easystock.ProductionLot (Lot);
 CREATE TABLE easystock.Production
 (
     RowId SERIAL NOT NULL,
+
     LocationId INT NOT NULL,
     LotId INT NULL,
-    WorkBookId INT NULL,
+--  WorkBookId INT NULL,
+
     ProductionDate TIMESTAMP NOT NULL,
-    ExpirationDate TIMESTAMP NULL,
-    ProductionName VARCHAR (40) NULL,
+--  ExpirationDate TIMESTAMP NULL,
+
+--  ProductionName VARCHAR (40) NULL,
     SerialCode VARCHAR (40) NULL,
-    ProductId  INT NOT NULL,
+    ProductName  VARCHAR (40) NULL,
+    FormulationRef VARCHAR (40) NULL,
+    NotebookRef VARCHAR (40) NULL,
+
+--  ProductId  INT NOT NULL,
     Operator VARCHAR (200) NULL,
     Humidity DECIMAL (5,4) NULL,
+
     NetWeight DECIMAL (10,2) NULL,
     UoW VARCHAR (10) NULL,
+
     Quantity DECIMAL (10,2) NULL,
     UoM VARCHAR (10) NULL,
+
     PackageAmount SMALLINT NULL,
     UoP VARCHAR (14) NULL,
 
@@ -118,8 +126,8 @@ CREATE TABLE easystock.Production
 
     CONSTRAINT PK_Production PRIMARY KEY (RowId),
     CONSTRAINT FK_Production_Location FOREIGN KEY (LocationId) REFERENCES easystock.Location (RowId),
-    CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId),
-    CONSTRAINT FK__Production_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId)
+    CONSTRAINT FK__Production_ProductionLot FOREIGN KEY (LotId) REFERENCES easystock.ProductionLot (RowId)
+ -- CONSTRAINT FK__Production_ProductId FOREIGN KEY (ProductId) REFERENCES easystock.Product (RowId)
 );
 
 -- for each location the lot available quantity
