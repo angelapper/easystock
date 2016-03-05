@@ -1,0 +1,83 @@
+<form name="sample_production_form">
+    <table cellspacing="0" cellpadding="5" border="0">
+        <tr>
+            <td colspan="2">Please Use this form to submit lab sample information</td>
+        </tr>
+        <tr>
+            <td colspan="2"><div id="errorTxt" style="display:none;color:red"></div></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Production Date:*</strong></td>
+            <td valign="top"><input type="text" id="production_date" name="production_date" size="30" readonly></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Production Batch:*</strong></td>
+            <td valign="top">
+                <input type="text" name="batch" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Sample Name*:</strong></td>
+            <td valign="top">
+                <input type="text" name="sample_name" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Quantity:*</strong></td>
+            <td valign="top">
+                <input type="text" name="quantity" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Unit:*</strong></td>
+            <td valign="top">
+                <select id="uom" name="uom">
+                    <option value="Liter">Liter</option>
+                    <option value="Milliliter">Milliliter</option>
+                    <option value="Gallon">Gallon</option>
+                    <option value="Gram">Gram</option>
+                    <option value="Kilogram">Kilogram</option>
+                    <option value="Pound">Pound</option>
+                    <option value="Ounce">Ounce</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Provider:*</strong></td>
+            <td valign="top">
+                <input type="text" id="provider_name" name="provider_name" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Company:</strong></td>
+            <td valign="top">
+                <input type="text" name="company" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Original Formulation:</strong></td>
+            <td valign="top">
+                <input type="text" name="formulation" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Note:</strong></td>
+            <td valign="top">
+                <textarea  name="sample_note" rows="4" cols="50"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                    <input name="submit" value='Submit' type='button' onclick='submitRequest()' ><span id="timer"><span>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    LABKEY.Utils.requiresCSS("calendar/pikaday.css");
+    LABKEY.Utils.requiresScript("calendar/moment.min.js");
+    LABKEY.Utils.requiresScript("calendar/pikaday.js");
+    LABKEY.Utils.requiresScript("simplelims/productionlots.js");
+    LABKEY.Utils.requiresScript("simplelims/submitsample.js");
+</script>

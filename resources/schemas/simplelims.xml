@@ -1,0 +1,28 @@
+<tables xmlns="http://labkey.org/data/xml">
+    <table tableName="Location" tableDbType="TABLE">
+        <columns>
+            <colum columnName ="RowId">
+                <columnTitle>Row Id</columnTitle>
+                <isHidden>true</isHidden>
+            </colum>
+            <colum columnName ="Name"/>
+            <colum columnName ="Code">
+                <isHidden>true</isHidden>
+            </colum>
+            <colum columnName ="FullCode">
+                <columnTitle>Full Code</columnTitle>
+            </colum>
+            <colum columnName ="IsPlant"/>
+            <column columnName="CountryCode"/>
+            <column columnName="CountryName"/>
+            <column columnName="City"/>
+            <column columnName="State"/>
+            <colum columnName ="YearCount"/>
+
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
+        </columns>
+    </table>
+</tables>

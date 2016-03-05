@@ -9,7 +9,7 @@
                   <fk>
                      <fkColumnName>RowId</fkColumnName>
                      <fkTable>ProductionLot</fkTable>
-                     <fkDbSchema>easystock</fkDbSchema>
+                     <fkDbSchema>simplelims</fkDbSchema>
                   </fk>
                </column>
                <column columnName="LocationId">
@@ -17,7 +17,7 @@
                   <fk>
                      <fkColumnName>RowId</fkColumnName>
                      <fkTable>Location</fkTable>
-                     <fkDbSchema>easystock</fkDbSchema>
+                     <fkDbSchema>simplelims</fkDbSchema>
                   </fk>
                </column>
                <column columnName="ProductId">
@@ -25,7 +25,7 @@
                   <fk>
                      <fkColumnName>RowId</fkColumnName>
                      <fkTable>Product</fkTable>
-                     <fkDbSchema>easystock</fkDbSchema>
+                     <fkDbSchema>simplelims</fkDbSchema>
                   </fk>
                </column>
                <column columnName="TotalCount"/>

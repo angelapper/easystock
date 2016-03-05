@@ -19,6 +19,7 @@ var SampleInventory = {
         });
       //  qwp1.on("render", this.onRender());
     },
+
     onRender: function ()   {
 
     },
