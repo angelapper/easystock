@@ -11,7 +11,7 @@
                   <fk>
                      <fkColumnName>RowId</fkColumnName>
                      <fkTable>Location</fkTable>
-                     <fkDbSchema>easystock</fkDbSchema>
+                     <fkDbSchema>simplelims</fkDbSchema>
                   </fk>
                </column>
             </columns>

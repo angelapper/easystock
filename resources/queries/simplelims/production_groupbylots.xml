@@ -1,0 +1,38 @@
+<query xmlns="http://labkey.org/data/xml/query">
+   <metadata>
+      <tables xmlns="http://labkey.org/data/xml">
+         <table tableName="default_productions" tableDbType="NOT_IN_DB">
+            <columns>
+               <column columnName="LastProduction"/>
+               <column columnName="LotId">
+                  <columnTitle>Lot Number</columnTitle>
+                  <fk>
+                     <fkColumnName>RowId</fkColumnName>
+                     <fkTable>ProductionLot</fkTable>
+                     <fkDbSchema>simplelims</fkDbSchema>
+                  </fk>
+               </column>
+               <column columnName="LocationId">
+                  <columnTitle>Plant Name</columnTitle>
+                  <fk>
+                     <fkColumnName>RowId</fkColumnName>
+                     <fkTable>Location</fkTable>
+                     <fkDbSchema>simplelims</fkDbSchema>
+                  </fk>
+               </column>
+               <column columnName="ProductId">
+                  <columnTitle>Product Name</columnTitle>
+                  <fk>
+                     <fkColumnName>RowId</fkColumnName>
+                     <fkTable>Product</fkTable>
+                     <fkDbSchema>simplelims</fkDbSchema>
+                  </fk>
+               </column>
+               <column columnName="TotalCount"/>
+               <column columnName="TotalQuantity"/>
+               <column columnName="UnitofMeasure"/>
+            </columns>
+         </table>
+      </tables>
+   </metadata>
+</query>

@@ -16,5 +16,5 @@
 
 -- Create schema, tables, indexes, and constraints used for easystock module here
 -- All SQL VIEW definitions should be created in easystock-create.sql and dropped in easystock-drop.sql
-CREATE SCHEMA easystock;
+CREATE SCHEMA simplelims;
 GO

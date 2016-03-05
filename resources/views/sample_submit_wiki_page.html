@@ -1,7 +1,7 @@
 <form name="ProductionSubmitFrom">
     <table cellspacing="0" cellpadding="5" border="0">
         <tr>
-            <td colspan="2">Please Use this form to submit lab sample production information</td>
+            <td colspan="2">Please Use this form to submit lab sample information</td>
         </tr>
         <tr>
             <td colspan="2"><div id="errorTxt" style="display:none;color:red"></div></td>
@@ -11,13 +11,15 @@
             <td valign="top"><input type="text" id="production_date" name="production_date" size="30" readonly></td>
         </tr>
         <tr>
-            <td valign="top" width="100"><strong>Product:*</strong></td>
+            <td valign="top" width="100"><strong>Production Batch:*</strong></td>
             <td valign="top">
-                <div>
-                    <select id="productlist" name="products">
-                        <option>Loading...</option>
-                    </select>
-                </div>
+                <input type="text" name="batch" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Sample Name:</strong></td>
+            <td valign="top">
+                <input type="text" name="sample_name" size="30">
             </td>
         </tr>
         <tr>
@@ -41,29 +43,18 @@
             </td>
         </tr>
         <tr>
-            <td valign="top" width="100"><strong>Net Weight:</strong></td>
-            <td valign="top">
-                <input type="text" name="netweight" size="30">
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" width="100"><strong>Weight Unit:</strong></td>
-            <td valign="top">
-                <select id="weightunits" name="weightunits">
-                    <option value="Gram">Gram</option>
-                    <option value="Kilogram">Kilogram</option>
-                    <option value="Pound">Pound</option>
-                    <option value="Ounce">Ounce</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
             <td valign="top" width="100"><strong>Provider:*</strong></td>
             <td valign="top">
                 <select id="provider_name" name="provider_name">
                     <option value="Ian Chan">Ian Chan</option>
                     <option value="Larry Co">Larry Co</option>
                 </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Original Formulation:</strong></td>
+            <td valign="top">
+                <input type="text" name="formulation" size="30">
             </td>
         </tr>
         <tr>
@@ -78,7 +69,7 @@
     LABKEY.Utils.requiresCSS("calendar/pikaday.css");
     LABKEY.Utils.requiresScript("calendar/moment.min.js");
     LABKEY.Utils.requiresScript("calendar/pikaday.js");
-    LABKEY.Utils.requiresScript("easystock/productionlots.js");
+    LABKEY.Utils.requiresScript("simplelims/productionlots.js");
 
     var catchLocation={
         ServerDate: {},
@@ -101,7 +92,7 @@
                 });
 
                 LABKEY.Query.selectRows({
-                    schemaName: 'easystock',
+                    schemaName: 'simplelims',
                     queryName: 'LocationProduct',
                     containerFilter:LABKEY.Query.containerFilter.currentAndSubfolders,
                     columns:['RowId','ProductId','LocationId','ProductId/Name','LocationId/YearCount','LocationId/FullCode'],
@@ -141,7 +132,7 @@
         //create a new production using the submission
         formSubmission.LocationId = catchLocation.Location;
         LABKEY.Query.insertRows({
-            schemaName: 'easystock',
+            schemaName: 'simplelims',
             queryName: 'Production',
             rowDataArray: [formSubmission],
             success: onSuccessNewProduction
@@ -154,13 +145,13 @@
         formSubmission={};
         err.innerHTML = '';
 
-        formSubmission.ProductionDate= document.ProductionSubmitFrom.production_date.value;
-        formSubmission.ProductId= document.ProductionSubmitFrom.products.value;
-        formSubmission.Quantity= document.ProductionSubmitFrom.quantity.value;
-        formSubmission.UoM= document.ProductionSubmitFrom.uom.value;
-        formSubmission.NetWeight= document.ProductionSubmitFrom.netweight.value;
-        formSubmission.UoW= document.ProductionSubmitFrom.weightunits.value;
-        formSubmission.Operator= document.ProductionSubmitFrom.provider_name.value;
+        formSubmission.ProductionDate= document.sample_production_form.production_date.value;
+        formSubmission.ProductId= document.sample_production_form.products.value;
+        formSubmission.Quantity= document.sample_production_form.quantity.value;
+        formSubmission.UoM= document.sample_production_form.uom.value;
+        formSubmission.NetWeight= document.sample_production_form.netweight.value;
+        formSubmission.UoW= document.sample_production_form.weightunits.value;
+        formSubmission.Operator= document.sample_production_form.provider_name.value;
 
         if (formSubmission.ProductionDate == '') {
             err.innerHTML += "Production Date is required.";
@@ -200,7 +191,7 @@
         {
             //generate lots and insert production
             LABKEY.Query.insertRows({
-                schemaName: 'easystock',
+                schemaName: 'simplelims',
                 queryName: 'ProductionLot',
                 rows: [{Lot: catchLot.NewLotNumber}],
                 failure: function ()
@@ -218,7 +209,7 @@
 
         var updateProduction ={
             command:'update',
-            schemaName: 'easystock',
+            schemaName: 'simplelims',
             queryName: 'Production',
             rows: [{
                 RowId: catchLot.ProductionId,
@@ -227,7 +218,7 @@
         };
         var updateLocation ={
             command:'update',
-            schemaName: 'easystock',
+            schemaName: 'simplelims',
             queryName: 'Location',
             rows: [{
                 RowId: catchLocation.Location,
@@ -259,7 +250,7 @@
         //assign to production
        /* LABKEY.Query.updateRows(
                 {
-                    schemaName: 'easystock',
+                    schemaName: 'simplelims',
                     queryName: 'Production',
                     rows: [{
                         RowId: catchLot.ProductionId,
@@ -274,7 +265,7 @@
                         //assign to production
                         LABKEY.Query.updateRows(
                                 {
-                                    schemaName: 'easystock',
+                                    schemaName: 'simplelims',
                                     queryName: 'Location',
                                     rows: [{
                                         RowId: catchLocation.Location,
