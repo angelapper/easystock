@@ -1,0 +1,317 @@
+<form name="ProductionSubmitFrom">
+    <table cellspacing="0" cellpadding="5" border="0">
+        <tr>
+            <td colspan="2">Please Use this form to submit lab sample production information</td>
+        </tr>
+        <tr>
+            <td colspan="2"><div id="errorTxt" style="display:none;color:red"></div></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Production Date:*</strong></td>
+            <td valign="top"><input type="text" id="production_date" name="production_date" size="30" readonly></td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Product:*</strong></td>
+            <td valign="top">
+                <div>
+                    <select id="productlist" name="products">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Quantity:*</strong></td>
+            <td valign="top">
+                <input type="text" name="quantity" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Unit:*</strong></td>
+            <td valign="top">
+                <select id="uom" name="uom">
+                    <option value="Liter">Liter</option>
+                    <option value="Milliliter">Milliliter</option>
+                    <option value="Gallon">Gallon</option>
+                    <option value="Gram">Gram</option>
+                    <option value="Kilogram">Kilogram</option>
+                    <option value="Pound">Pound</option>
+                    <option value="Ounce">Ounce</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Net Weight:</strong></td>
+            <td valign="top">
+                <input type="text" name="netweight" size="30">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Weight Unit:</strong></td>
+            <td valign="top">
+                <select id="weightunits" name="weightunits">
+                    <option value="Gram">Gram</option>
+                    <option value="Kilogram">Kilogram</option>
+                    <option value="Pound">Pound</option>
+                    <option value="Ounce">Ounce</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="100"><strong>Provider:*</strong></td>
+            <td valign="top">
+                <select id="provider_name" name="provider_name">
+                    <option value="Ian Chan">Ian Chan</option>
+                    <option value="Larry Co">Larry Co</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="2">
+                    <input value='Submit' type='button' onclick='submitRequest()' >
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    LABKEY.Utils.requiresCSS("calendar/pikaday.css");
+    LABKEY.Utils.requiresScript("calendar/moment.min.js");
+    LABKEY.Utils.requiresScript("calendar/pikaday.js");
+    LABKEY.Utils.requiresScript("easystock/productionlots.js");
+
+    var catchLocation={
+        ServerDate: {},
+        Location:1,
+        YearCount:"",
+        PlatCode:"",
+    };
+
+    var catchLot={ };
+
+    MyApp = function()
+    {
+        return {
+            init: function() {
+                var picker = new Pikaday({
+                    field: document.getElementById('production_date'),
+                    onSelect: function() {
+                        console.log(this.getMoment().format('Do MMMM YYYY'));
+                    }
+                });
+
+                LABKEY.Query.selectRows({
+                    schemaName: 'easystock',
+                    queryName: 'LocationProduct',
+                    containerFilter:LABKEY.Query.containerFilter.currentAndSubfolders,
+                    columns:['RowId','ProductId','LocationId','ProductId/Name','LocationId/YearCount','LocationId/FullCode'],
+                    filterArray: [
+                        LABKEY.Filter.create('LocationId', catchLocation.Location,LABKEY.Filter.Types.EQUAL)],
+                    success: populateProducts
+                });
+            }
+        };
+    }();
+
+    function populateProducts(data,response,option) {
+        var el = document.getElementById("productlist");
+        el.options[0].text = "<Select Product>";
+        for (var i = 0; i < data.rows.length; i++) {
+            var opt = document.createElement("option");
+            opt.text = data.rows[i]["ProductId/Name"];
+            opt.value = data.rows[i].ProductId;
+            el.options[el.options.length] = opt;
+        }
+
+        if(data.rows.length > 0){
+            catchLocation.YearCount=data.rows[0]["LocationId/YearCount"];
+            catchLocation.PlatCode=data.rows[0]["LocationId/FullCode"];
+        }
+        catchLocation.ServerDate = ProductionLot.GetServerTime(option);
+    }
+
+    // and determining the current date.
+    var formSubmission={};
+    function submitRequest() {
+        // Make sure the form contains valid data
+        if (catchLocation.YearCount=="" || catchLocation.PlatCode=="" || !getResultValidForm()) {
+            return;
+        }
+
+        //create a new production using the submission
+        formSubmission.LocationId = catchLocation.Location;
+        LABKEY.Query.insertRows({
+            schemaName: 'easystock',
+            queryName: 'Production',
+            rowDataArray: [formSubmission],
+            success: onSuccessNewProduction
+        });
+    }
+
+    function getResultValidForm() {
+        var result = true;
+        var err = document.getElementById("errorTxt");
+        formSubmission={};
+        err.innerHTML = '';
+
+        formSubmission.ProductionDate= document.ProductionSubmitFrom.production_date.value;
+        formSubmission.ProductId= document.ProductionSubmitFrom.products.value;
+        formSubmission.Quantity= document.ProductionSubmitFrom.quantity.value;
+        formSubmission.UoM= document.ProductionSubmitFrom.uom.value;
+        formSubmission.NetWeight= document.ProductionSubmitFrom.netweight.value;
+        formSubmission.UoW= document.ProductionSubmitFrom.weightunits.value;
+        formSubmission.Operator= document.ProductionSubmitFrom.provider_name.value;
+
+        if (formSubmission.ProductionDate == '') {
+            err.innerHTML += "Production Date is required.";
+            result = false;
+        }
+
+        if (isNaN(formSubmission.ProductId)) {
+            if(err.innerHTML != '<Select Product>')
+                err.innerHTML += "<br>";
+            err.innerHTML += "Product is required.";
+            result = false;
+        }
+
+        if (isNaN(formSubmission.Quantity)) {
+            if(err.innerHTML != '')
+                err.innerHTML += "<br>";
+            err.innerHTML += "Quantity is invalid.";
+            result = false;
+        }
+
+        if(!result)
+            document.getElementById("errorTxt").style.display = "block";
+        return result;
+    }
+
+    function onSuccessNewProduction(data, requestObj,options)
+    {
+        console.log("NewProduction: ",data);
+        //create Lot number and then assign to the production
+        catchLot.ProductionId = data.rows[0].rowid;
+        catchLot.NewCounter = ProductionLot.GetNewCounter(catchLocation.YearCount);
+        catchLot.ServerYear = catchLocation.ServerDate.getFullYear();
+        catchLot.NewLotNumber =ProductionLot.GenerateLot(catchLocation.PlatCode,
+                ProductionLot.YearToCode(catchLot.ServerYear),  catchLot.NewCounter);
+
+        if(catchLot.NewLotNumber)
+        {
+            //generate lots and insert production
+            LABKEY.Query.insertRows({
+                schemaName: 'easystock',
+                queryName: 'ProductionLot',
+                rows: [{Lot: catchLot.NewLotNumber}],
+                failure: function ()
+                {
+                    console.log('Fail', 'Fail to insert');
+                },
+                success: onSuccessSaveLot
+            });
+       }
+    }
+
+    function onSuccessSaveLot(data, requestObj,options)
+    {
+        var newLotId = data.rows[0].rowid;
+
+        var updateProduction ={
+            command:'update',
+            schemaName: 'easystock',
+            queryName: 'Production',
+            rows: [{
+                RowId: catchLot.ProductionId,
+                LotId: newLotId
+            }]
+        };
+        var updateLocation ={
+            command:'update',
+            schemaName: 'easystock',
+            queryName: 'Location',
+            rows: [{
+                RowId: catchLocation.Location,
+                YearCount: JSON.stringify( {
+                    Stat: {
+                        Year:catchLot.ServerYear,
+                        Total:catchLot.NewCounter
+                    }
+                })
+            }]
+        };
+        var saveCommands = [updateProduction,updateLocation];
+
+        LABKEY.Query.saveRows(
+                {
+                    commands:saveCommands ,
+                    failure: function(dataf,frequestObj,foptions){
+                        console.log('Failure:', dataf);
+                        console.log('requestObj: ', frequestObj);
+                        console.log('options:', foptions);
+                    },
+                    success: function(sdata,srequestObj,soptions){
+                        console.log('Success:', sdata);
+                        console.log('requestObj: ', srequestObj);
+                        console.log('options:', soptions);
+                    }
+                }
+        );
+        //assign to production
+       /* LABKEY.Query.updateRows(
+                {
+                    schemaName: 'easystock',
+                    queryName: 'Production',
+                    rows: [{
+                        RowId: catchLot.ProductionId,
+                        LotId: newLotId
+                    }],
+                    failure: function(){
+                        console.log('Fail', 'Fail to insert');
+                    },
+                    success: function(){
+                        console.log('Success', 'Assigned to insert');
+
+                        //assign to production
+                        LABKEY.Query.updateRows(
+                                {
+                                    schemaName: 'easystock',
+                                    queryName: 'Location',
+                                    rows: [{
+                                        RowId: catchLocation.Location,
+                                        YearCount: JSON.stringify( {
+                                            Stat: {
+                                                Year:catchLot.ServerYear,
+                                                Total:catchLot.NewCounter
+                                            }
+                                            })
+                                    }],
+                                    failure: function(){
+                                        console.log('Fail', 'Fail to Count');
+                                    },
+                                    success: function(){
+                                        console.log('Success', 'New Year Count');
+                                    }
+                                }
+                        );
+                    }
+                }
+        );*/
+
+        /*console.log('Success:', data);
+        console.log('requestObj: ', requestObj);
+        console.log('options:', options);
+*/
+        // The set of URL parameters.
+        var params = {
+            "name": 'confirmation', // The destination wiki page. The name of this parameter is not arbitrary.
+            "userid": LABKEY.Security.currentUser.id // The name of this parameter is arbitrary.
+        };
+
+        // This changes the page after building the URL. Note that the wiki page destination name is set in params.
+        var wikiURL = LABKEY.ActionURL.buildURL("wiki", "page", LABKEY.ActionURL.getContainer(), params);
+        window.location = wikiURL;
+    }
+
+    Ext.onReady(MyApp.init, MyApp);
+
+</script>

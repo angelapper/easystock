@@ -1,0 +1,35 @@
+<!--
+the most important part is the folder name of queries have to refer the schema and table
+https://www.labkey.org/wiki/home/Documentation/page.view?name=moduleqvr
+
+SQL queries on the database (.SQL files)
+Metadata on the above queries (.query.xml files).
+Named views on pre-existing queries (.qview.xml files)
+Trigger scripts attached to a query (.js files)
+- these scripts are run whenever there an event (insert, update, etc.) on the underlying table.
+-->
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+   <columns>
+      <column name="ProductionDate"/>
+      <column name="LotId">
+         <properties>
+            <property name="columnTitle" value="Lot Number"/>
+         </properties>
+      </column>
+      <column name="InternalCode">
+         <properties>
+            <property name="columnTitle" value="CELB#"/>
+         </properties>
+      </column>
+      <column name="Operator"/>
+      <column name="LocationId" >
+         <properties>
+            <property name="columnTitle" value="Plant Name"/>
+         </properties>
+      </column>
+   </columns>
+   <!--sorts>
+      <sort column="ProductName"/>
+   </sorts -->
+</customView>
+

@@ -1,0 +1,21 @@
+<query xmlns="http://labkey.org/data/xml/query">
+   <metadata>
+      <tables xmlns="http://labkey.org/data/xml">
+         <table tableName="default_productions" tableDbType="NOT_IN_DB">
+            <columns>
+               <column columnName="RowId">
+                  <isKeyField>true</isKeyField>
+                  <columnTitle>Production Number</columnTitle>
+               </column>
+               <column columnName="LocationId">
+                  <fk>
+                     <fkColumnName>RowId</fkColumnName>
+                     <fkTable>Location</fkTable>
+                     <fkDbSchema>easystock</fkDbSchema>
+                  </fk>
+               </column>
+            </columns>
+         </table>
+      </tables>
+   </metadata>
+</query>

@@ -1,0 +1,39 @@
+<!--
+https://www.labkey.org/wiki/home/Documentation/page.view?name=addHTMLandWebPart
+URL will be:
+http://<domain>/labkey/<module name>/<file_path_under_view_directory>/<page_name>.view|html
+
+Customize View:
+https://www.labkey.org/wiki/home/Documentation/page.view?name=customParticipantView
+https://www.labkey.org/wiki/home/Documentation/page.view?name=reagentRequestForm
+-->
+
+<html>
+<head>
+    <script type="text/javascript">
+        LABKEY.Utils.requiresScript("easystock/easystockconfig.js");
+        LABKEY.Utils.requiresScript("easystock/location.js");
+    </script>
+</head>
+<body>
+<div>
+    <select id="Reagent" name="Reagent">
+        <option>Loading...</option>
+    </select>
+</div>
+
+<div id="all_location"></div>
+
+<script type="text/javascript">
+    Ext.onReady(Location.toShowGrid);
+
+    LABKEY.Query.selectRows({
+        schemaName: 'lists',
+        queryName: 'Reagents',
+        success: populateReagents
+    });
+    document.getElementById("Reagent").selectedIndex = 0;
+</script>
+
+</body>
+</html>

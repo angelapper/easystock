@@ -1,79 +1,169 @@
 <tables xmlns="http://labkey.org/data/xml">
-    <table tableName="location" tableDbType="TABLE">
+    <table tableName="Location" tableDbType="TABLE">
         <columns>
-            <colum columnName ="id"/>
-            <colum columnName ="name"/>
-            <colum columnName ="full_code"/>
-            <colum columnName ="plant_code"/>
-            <colum columnName ="is_plant"/>
-            <column columnName="city"/>
-            <column columnName="state"/>
-            <column columnName="country"/>
-            <column columnName="country_code"/>
-            <colum columnName ="create_date"/>
+            <colum columnName ="RowId">
+                <columnTitle>Row Id</columnTitle>
+                <isHidden>true</isHidden>
+            </colum>
+            <colum columnName ="Name"/>
+            <colum columnName ="Code">
+                <isHidden>true</isHidden>
+            </colum>
+            <colum columnName ="FullCode">
+                <columnTitle>Full Code</columnTitle>
+            </colum>
+            <colum columnName ="IsPlant"/>
+            <column columnName="CountryCode"/>
+            <column columnName="CountryName"/>
+            <column columnName="City"/>
+            <column columnName="State"/>
+            <colum columnName ="YearCount"/>
+
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
         </columns>
     </table>
 
-    <table tableName="stock_production" tableDbType="TABLE">
+    <table tableName="Product" tableDbType="TABLE">
         <columns>
-            <column columnName="id"/>
-            <column columnName="product_by">
-                <fk>
-                    <fkColumnName>id</fkColumnName>
-                    <fkTable>location</fkTable>
-                </fk>
-            </column>
-            <column columnName="lot">
-                <fk>
-                    <fkColumnName>id</fkColumnName>
-                    <fkTable>stock_production_lot</fkTable>
-                </fk>
-            </column>
-            <column columnName="production_batch"/>
-            <column columnName="production_date"/>
-            <column columnName="expiration_date"/>
-            <column columnName="product_name"/>
-            <column columnName="internal_code"/>
-            <column columnName="reference_code"/>
-            <column columnName="operator"/>
-            <column columnName="net_weight"/>
-            <column columnName="uow"/>
-            <column columnName="quantity"/>
-            <column columnName="uom"/>
-            <column columnName="package_amount"/>
-            <column columnName="uop"/>
-            <column columnName="humidity"/>
+            <colum columnName ="RowId"/>
+            <colum columnName ="Name"/>
+            <colum columnName ="CommonName"/>
+            <colum columnName ="FullCode">
+                <columnTitle>Full Code</columnTitle>
+            </colum>
+            <colum columnName ="IsPlant"/>
+            <column columnName="InternalCode"/>
+            <column columnName="Category"/>
+            <column columnName="ProductionLine"/>
+            <colum columnName ="Description"/>
+            <colum columnName ="CurrentStatus"/>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
         </columns>
     </table>
 
-    <table tableName="stock_production_lot" tableDbType="TABLE">
+    <table tableName="Production" tableDbType="TABLE">
         <columns>
-            <column columnName="id"/>
-            <column columnName="lot"/>
-            <column columnName="name"/>
-            <column columnName="create_date"/>
+            <column columnName="RowId">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="LocationId">
+                <fk>
+                    <fkTable>Location</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="LotId">
+                <fk>
+                    <fkTable>ProductionLot</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="ProductionDate"/>
+            <column columnName="ExpirationDate"/>
+            <column columnName="ProductionName"/>
+            <column columnName="SerialCode"/>
+            <column columnName="ProductId">
+                <fk>
+                    <fkTable>Product</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="Operator"/>
+            <column columnName="Humidity">
+                <formatString>0.0%</formatString>
+            </column>
+            <column columnName="NetWeight"/>
+            <column columnName="UoW">
+                <columnTitle>Weight Unit</columnTitle>
+            </column>
+            <column columnName="Quantity"/>
+            <column columnName="UoM">
+                <columnTitle>Quantity Unit</columnTitle>
+            </column>
+            <column columnName="PackageAmount"/>
+            <column columnName="UoP">
+                <columnTitle>Package Type</columnTitle>
+            </column>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
         </columns>
     </table>
 
-    <table tableName="stock_inventory" tableDbType="TABLE">
+    <table tableName="LocationProduct" tableDbType="TABLE">
         <columns>
-            <column columnName="received_date"/>
-            <column columnName="received_quantity"/>
-            <column columnName="uom"/>
-            <column columnName="usage_quantity"/>
-            <column columnName="uom"/>
-            <column columnName="location_id">
+            <column columnName="RowId"/>
+            <column columnName="ProductId">
                 <fk>
-                    <fkColumnName>id</fkColumnName>
-                    <fkTable>location</fkTable>
+                    <fkTable>Product</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                    <fkDisplayColumnName useRawValue="true">Name</fkDisplayColumnName>
                 </fk>
             </column>
-            <column columnName="lot_id">
+            <column columnName="LocationId">
                 <fk>
-                    <fkColumnName>id</fkColumnName>
-                    <fkTable>stock_production_lot</fkTable>
+                    <fkTable>Location</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
                 </fk>
             </column>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="ProductionLot" tableDbType="TABLE">
+        <columns>
+            <column columnName="RowId"/>
+            <column columnName="Lot"/>
+            <column columnName="Reference"/>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
+        </columns>
+    </table>
+
+    <table tableName="SampleInventory" tableDbType="TABLE">
+        <columns>
+            <column columnName="RowId">
+                <isHidden>true</isHidden>
+            </column>
+            <column columnName="LocationId">
+                <fk>
+                    <fkTable>Location</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="LotId">
+                <columnTitle>Lot#</columnTitle>
+                <fk>
+                    <fkTable>ProductionLot</fkTable>
+                    <fkColumnName>RowId</fkColumnName>
+                </fk>
+            </column>
+            <column columnName="Quantity"/>
+            <column columnName="UoM"/>
+            <column columnName="Room"/>
+            <column columnName="Shelf"/>
+            <column columnName="Box"/>
+            <colum columnName ="Container"/>
+            <colum columnName ="Created"/>
+            <colum columnName ="CreatedBy"/>
+            <colum columnName ="Modified"/>
+            <colum columnName ="ModifiedBy"/>
         </columns>
     </table>
 </tables>
